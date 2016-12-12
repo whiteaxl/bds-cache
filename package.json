@@ -1,0 +1,29 @@
+{
+  "name": "bds-cache",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node bootstrap.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reway/bds-cache.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/reway/bds-cache/issues"
+  },
+  "homepage": "https://github.com/reway/bds-cache#readme",
+  "dependencies": {
+    "async": "2.1.4",
+    "babel-core": "^6.20.0",
+    "babel-preset-es2015": "^6.18.0",
+    "couchbase": "^2.2.5",
+    "hapi": "^16.0.1",
+    "lodash": "^4.17.2",
+    "redis": "^2.6.3"
+  }
+}
