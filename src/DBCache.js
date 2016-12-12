@@ -16,7 +16,7 @@ var FIELDS =
   [ "id", "gia", "loaiTin", "dienTich", "soPhongNgu", "soTang", "soPhongTam"
   , "place.diaChinh.codeTinh", "place.diaChinh.codeHuyen", "place.diaChinh.codeXa", "place.diaChinh.codeDuAn"
   , "place.geo.lat", "place.geo.lon"
-  //, "giaM2", "loaiNhaDat", "huongNha", "ngayDangTin", "chiTiet", "timeExtracted"
+  , "giaM2", "loaiNhaDat", "huongNha", "ngayDangTin", "chiTiet", "timeExtracted"
   //, "dangBoi.name", "dangBoi.phone", "dangBoi.email"
   //, "`image.cover`", "image.images"
   ];
@@ -29,7 +29,7 @@ function loadAds(redisClient, callback) {
   commonService.query(sql, (err, list) => {
     if (err) return console.error(err);
 
-    async.each(list, (e, doneOne) => {
+    async.eachSeries(list, (e, doneOne) => {
       let ads = _.cloneDeep(e);
       delete ads.images;
       deleteNull(ads);
