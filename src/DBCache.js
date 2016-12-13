@@ -4,6 +4,8 @@ var _ = require("lodash");
 var redis = require('redis');
 var async = require('async');
 
+var log = require("./logUtil");
+
 var commonService = require("./dbServices");
 //declare global cache
 global.lastSyncTime = 0;
@@ -14,18 +16,18 @@ var COMPARE_FIELDS = ["id", "gia", "loaiTin", "dienTich", "soPhongNgu", "soTang"
 
 var FIELDS =
   [ "id"
-  //, "gia", "loaiTin", "dienTich", "soPhongNgu", "soTang", "soPhongTam"
-  //, "place.diaChinh.codeTinh", "place.diaChinh.codeHuyen", "place.diaChinh.codeXa", "place.diaChinh.codeDuAn"
-  //, "place.geo.lat", "place.geo.lon"
-  //, "giaM2", "loaiNhaDat", "huongNha", "ngayDangTin", "chiTiet", "timeExtracted"
-  //, "dangBoi.name", "dangBoi.phone", "dangBoi.email"
-  //, "`image.cover`", "image.images"
+  , "gia", "loaiTin", "dienTich", "soPhongNgu", "soTang", "soPhongTam"
+  , "place.diaChinh.codeTinh", "place.diaChinh.codeHuyen", "place.diaChinh.codeXa", "place.diaChinh.codeDuAn"
+  , "place.geo.lat", "place.geo.lon"
+  , "giaM2", "loaiNhaDat", "huongNha", "ngayDangTin", "chiTiet", "timeExtracted"
+  , "dangBoi.name", "dangBoi.phone", "dangBoi.email"
+  , "`image.cover`", "image.images"
   ];
 
 function loadAds(redisClient, callback) {
 
   commonService.query("select count(*) from default where type='Ads' and timeModified >= 0", (err, list) => {
-    console.log("List:", list);
+    console.log("Couchbae DB count:", list);
   });
 
 
@@ -34,12 +36,10 @@ function loadAds(redisClient, callback) {
   let projection = FIELDS.join(",");
   let sql = `select ${projection} from default where type='Ads' and timeModified >= ${global.lastSyncTime}  ` ;
 
-
-
   commonService.query(sql, (err, list) => {
     if (err) return console.error(err);
 
-    console.log("Number of records from DB:" + list.length);
+    log.info("Number of records from DB:" + list.length);
 
     callback();
 
@@ -53,7 +53,7 @@ function loadAds(redisClient, callback) {
         redisClient.HMSET(ads.id
           , ads
           , (err, rep) => {
-            if (err) {console.error("error:", err, rep);}
+            if (err) {log.error("error:", err, rep);}
             callback();
           });
       });
@@ -65,7 +65,7 @@ function loadAds(redisClient, callback) {
 
         redisClient.SADD(field + ":" + ads[field] , ads.id
           , (err, rep) => {
-            if (err) console.error("error:", err, rep);
+            if (err) log.error("error:", err, rep);
             //console.log("SADD = ", field + ":" + ads[field], ads.id);
             callback();
           });
@@ -78,7 +78,7 @@ function loadAds(redisClient, callback) {
 
         redisClient.ZADD(field, ads[field] , ads.id
           , (err, rep) => {
-            if (err) console.error("error:", err, rep);
+            if (err) log.error("error:", err, rep);
             callback();
           });
       };
@@ -109,12 +109,15 @@ function loadAds(redisClient, callback) {
 
     };
 
-    /*
     async.eachSeries(list, processOne , (err1) => {
+
+      if (err1) log.error("Error when prcess all to Redis...", err1);
+
       console.log("Done load all Ads ", list.length + " records");
+
       callback(list.length);
     });
-    */
+
   });
 }
 
@@ -155,7 +158,7 @@ var cache = {
 
   reloadAds(done) {
     if (this._loadingAds) {
-      console.error("Can't perform reloadAds, there is readAds running!");
+      log.error("Can't perform reloadAds, there is readAds running!");
       return;
     }
     this._loadingAds = true;
@@ -171,7 +174,7 @@ var cache = {
       loadAds(redisClient, (length)=> {
         total += length;
         redisClient.dbsize((err, rep) => {
-          console.log("Get size:" , rep);
+          log.info("Get size:" , rep);
         });
 
         console.log("Total loaded ads : ", total + ", from loki ads:" );
