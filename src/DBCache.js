@@ -27,7 +27,7 @@ var FIELDS =
 function loadAds(redisClient, callback) {
 
   commonService.query("select count(*) from default where type='Ads' and timeModified >= 0", (err, list) => {
-    console.log("Couchbae DB count:", list);
+    log.info("Couchbae DB count:", list);
   });
 
 
@@ -109,7 +109,7 @@ function loadAds(redisClient, callback) {
 
     };
 
-    async.eachSeries(list, processOne , (err1) => {
+    async.each(list, processOne , (err1) => {
 
       if (err1) log.error("Error when prcess all to Redis...", err1);
 

@@ -13,7 +13,7 @@ var cluster = new couchbase.Cluster(dbcfg.clusterUrl);
 var bucket = cluster.openBucket(dbcfg.dbName);
 bucket.enableN1ql([dbcfg.n1ql]);
 bucket.operationTimeout = 240 * 1000;
-bucket.n1qlTimeout = 10 * 60 * 1000;
+bucket.n1qlTimeout = 30 * 60 * 1000;
 var N1qlQuery = require('couchbase').N1qlQuery;
 
 console.log("Call import mydb", dbcfg.clusterUrl);
