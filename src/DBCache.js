@@ -13,10 +13,11 @@ var COMPARE_FIELDS = ["id", "gia", "loaiTin", "dienTich", "soPhongNgu", "soTang"
   , "place", "loaiNhaDat", "huongNha", "ngayDangTin", "chiTiet", "dangBoi"];
 
 var FIELDS =
-  [ "id", "gia", "loaiTin", "dienTich", "soPhongNgu", "soTang", "soPhongTam"
-  , "place.diaChinh.codeTinh", "place.diaChinh.codeHuyen", "place.diaChinh.codeXa", "place.diaChinh.codeDuAn"
-  , "place.geo.lat", "place.geo.lon"
-  , "giaM2", "loaiNhaDat", "huongNha", "ngayDangTin", "chiTiet", "timeExtracted"
+  [ "id"
+  //, "gia", "loaiTin", "dienTich", "soPhongNgu", "soTang", "soPhongTam"
+  //, "place.diaChinh.codeTinh", "place.diaChinh.codeHuyen", "place.diaChinh.codeXa", "place.diaChinh.codeDuAn"
+  //, "place.geo.lat", "place.geo.lon"
+  //, "giaM2", "loaiNhaDat", "huongNha", "ngayDangTin", "chiTiet", "timeExtracted"
   //, "dangBoi.name", "dangBoi.phone", "dangBoi.email"
   //, "`image.cover`", "image.images"
   ];
