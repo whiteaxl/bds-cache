@@ -30,7 +30,11 @@ function loadAds(redisClient, callback) {
   commonService.query(sql, (err, list) => {
     if (err) return console.error(err);
 
-    async.eachSeries(list, (e, doneOne) => {
+    console.log("Number of records from DB:" + list.length);
+
+    callback();
+
+    let processOne = (e, doneOne) => {
       let ads = _.cloneDeep(e);
       delete ads.images;
       deleteNull(ads);
@@ -94,10 +98,14 @@ function loadAds(redisClient, callback) {
         doneOne();
       })
 
-    }, (err1) => {
+    };
+
+    /*
+    async.eachSeries(list, processOne , (err1) => {
       console.log("Done load all Ads ", list.length + " records");
       callback(list.length);
     });
+    */
   });
 }
 
