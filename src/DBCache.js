@@ -41,8 +41,6 @@ function loadAds(redisClient, callback) {
 
     log.info("Number of records from DB:" + list.length);
 
-    callback();
-
     let processOne = (e, doneOne) => {
       let ads = _.cloneDeep(e);
       delete ads.images;
@@ -109,7 +107,7 @@ function loadAds(redisClient, callback) {
 
     };
 
-    async.each(list, processOne , (err1) => {
+    async.eachLimit(list, 100, processOne , (err1) => {
 
       if (err1) log.error("Error when prcess all to Redis...", err1);
 
@@ -177,11 +175,11 @@ var cache = {
           log.info("Get size:" , rep);
         });
 
-        console.log("Total loaded ads : ", total + ", from loki ads:" );
+        console.log("Total loaded ads : " + total + ", from loki ads:" );
         that._loadingAds = false;
 
         //
-        scan(redisClient);
+        //scan(redisClient);
 
         done && done();
       });
