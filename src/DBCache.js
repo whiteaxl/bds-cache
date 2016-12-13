@@ -23,10 +23,19 @@ var FIELDS =
   ];
 
 function loadAds(redisClient, callback) {
+
+  commonService.query("select count(*) from default where type='Ads' and timeModified >= 0", (err, list) => {
+    console.log("List:", list);
+  });
+
+
   //let projection = "id, gia, loaiTin, dienTich, soPhongNgu, soTang, soPhongTam, image, place, giaM2, loaiNhaDat, huongNha, ngayDangTin,timeExtracted ";
   //projection = isFull ? "`timeModified`,`id`,`gia`,`loaiTin`,`dienTich`,`soPhongNgu`,`soTang`,`soPhongTam`,`image`,`place`,`giaM2`,`loaiNhaDat`,`huongNha`,`ngayDangTin`,`chiTiet`,`dangBoi`,`source`,`type`,`maSo`,`url`,`GEOvsDC`,`GEOvsDC_distance`,`GEOvsDC_radius`,`timeExtracted`" : projection;
   let projection = FIELDS.join(",");
   let sql = `select ${projection} from default where type='Ads' and timeModified >= ${global.lastSyncTime}  ` ;
+
+
+
   commonService.query(sql, (err, list) => {
     if (err) return console.error(err);
 
